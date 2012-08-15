@@ -26,9 +26,6 @@ class lw_de_file extends projectBasis
     {
     }
 
-    /**
-     * Verteilerfunktion
-     */
     function execute($isLoggedIn) 
     {
         switch ($this->request->getAlnum("cmd")) {
@@ -75,27 +72,18 @@ class lw_de_file extends projectBasis
         }
     }
     
-    /**
-     * Benennt eine ausgewählte Datei um.
-     */
     function rename() 
     {
         $this->fileObject->rename($this->request->getRaw("rename") . "." . $this->fileObject->getExtension());
         $this->redirectToActualList();
     }
     
-    /**
-     * löscht die ausgewählte datei 
-     */
     function delete() 
     {
         $this->fileObject->delete();
         $this->redirectToActualList();
     }    
     
-    /**
-     * download der ausgewählten datei 
-     */
     function download() 
     {
         $content = file_get_contents($this->fileObject->getFullPath());
@@ -104,9 +92,6 @@ class lw_de_file extends projectBasis
         die($content);
     }    
     
-    /**
-     * überprüft ob der dateiname bereists im verzeichnis zu finden ist 
-     */
     function checkIfFilenameExists() 
     {
         $filename = $this->fileObject->getFilename();
@@ -120,10 +105,6 @@ class lw_de_file extends projectBasis
         $this->redirectToActualList();
     }
 
-    /**
-     * zeigt das uploadforumlar an
-     * @return string 
-     */
     function showUploadForm() 
     {
         $tpl = new lw_te(file_get_contents(dirname(__FILE__) . '/../templates/upload.tpl.html'));
@@ -176,11 +157,6 @@ class lw_de_file extends projectBasis
         return false;
     }
     
-    /**
-     *prüft ob der name der hochzuladenden datei bereits existiert. 
-     * @param array $fileDataArray
-     * @param string $uploadExtension 
-     */
     function checkUploadFilenameandUpload($fileDataArray,$uploadExtension) 
     {
         if ($this->directoryObject->isExtensionAllowed($uploadExtension)) {
@@ -216,11 +192,6 @@ class lw_de_file extends projectBasis
         }
     }
 
-    /**
-     *umrechnung der max uploadsize in bytes
-     * @param string $size
-     * @return int 
-     */
     function maxFileSizePostInBytes($size) 
     {
         $stringEnd = strtolower(substr($size, strlen($size)-1, 1));

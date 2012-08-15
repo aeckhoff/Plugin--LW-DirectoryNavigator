@@ -27,10 +27,6 @@ class lw_directoryexplorer extends lw_plugin
         $this->in_auth = lw_in_auth::getInstance();
     }
     
-    /**
-     *Prüft ob der User eingeloggt ist.
-     * @return boolean 
-     */
     function isLoggedIn()
     {
         if ($this->auth->isLoggedIn() || $this->in_auth->isLoggedIn()) {
@@ -39,10 +35,6 @@ class lw_directoryexplorer extends lw_plugin
         return false;
     }    
     
-    /**
-     *shows the page output
-     * @return 
-     */
     function buildPageOutput() 
     {
         $this->existLwDirectoryexplorerDir();
@@ -67,11 +59,6 @@ class lw_directoryexplorer extends lw_plugin
         }
     }
     
-    /**
-     *create object and setting vars for this object.
-     * @param string $objectName
-     * @return \objectName 
-     */
     function getObject($objectName)
     {
         require_once dirname(__FILE__).'/classes/projectBasis.php';
@@ -110,10 +97,6 @@ class lw_directoryexplorer extends lw_plugin
         return $directoryObject;
     }
     
-    /**
-     *shows backend output and setting vars for this object.
-     * @return type 
-     */
     function getOutput() 
     {
         require_once dirname(__FILE__).'/classes/projectBasis.php';
@@ -135,9 +118,6 @@ class lw_directoryexplorer extends lw_plugin
         return true;
     }
     
-    /**
-     *Prüft ob das lw_directoryexplorer Hauptverzeichnis vorhanden ist. 
-     */
     function existLwDirectoryexplorerDir()
     {
         #existiert plugin hauptverzeichnis
@@ -152,10 +132,6 @@ class lw_directoryexplorer extends lw_plugin
         }        
     }
     
-    /**
-     * Prüft ob im Stammverzeichnis lw_directoryexplorer die lwdirinfo.txt Datei vorhanden ist.
-     * Ggf. wird eine Infodatei erstellt. 
-     */
     function existLwdirinfoInMainPluginDir()
     {
         $directory = lw_directory::getInstance($this->config["path"]["web_resource"] . "lw_directoryexplorer/");
@@ -171,10 +147,6 @@ class lw_directoryexplorer extends lw_plugin
         }
     }
     
-    /**
-     * Prüft ob der Nutzer ein eigenes CSS-Template nutzen möchte.
-     * Wenn nicht, dann wird das Standart-Template geladen. 
-     */
     function checkUseOfCustomCss()
     {
         $isUseCustomCssSet = $this->repository->plugins()->loadPluginData($this->getPluginName(), $this->params['oid']);

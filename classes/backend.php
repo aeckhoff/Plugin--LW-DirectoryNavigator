@@ -26,9 +26,6 @@ class backend extends projectBasis
         require_once dirname(__FILE__).'/projectBasis.php';
     }
     
-    /**
-     *save backend parameter. 
-     */
     function backend_save()
     {
         $parameter['homedir'] = $this->request->getRaw("homedir");
@@ -39,10 +36,6 @@ class backend extends projectBasis
         $this->pageReload($this->buildURL(false, array("pcmd")));
     }
     
-    /**
-     *shows the backend form.
-     * @return string 
-     */
     function backend_view()
     {
         $data = $this->repository->plugins()->loadPluginData($this->getPluginName(), $this->getOid());
@@ -53,10 +46,6 @@ class backend extends projectBasis
         return $tpl->parse();
     }
     
-    /**
-     *build backend form
-     * @return \lw_fe 
-     */
     function _buildAdminForm() 
     {
         $form = new lw_fe();
@@ -65,11 +54,6 @@ class backend extends projectBasis
                 ->setIntroduction('Basisdaten der Liste')
                 ->setDefaultErrorMessage('Es sind Fehler aufgetreten!')
                 ->setAction($this->buildUrl(array("pcmd"=>"save")));
-
-//        $form->createElement("textarea")
-//                ->setName('mailtemplate1')
-//                ->setID('lw_mailtemplate1')
-//                ->setLabel('Mailtemplate Upload');
         
         $form->createElement("textfield")
                 ->setName('homedir')
@@ -81,15 +65,6 @@ class backend extends projectBasis
                 ->setID('lw_allowedExtensions')
                 ->setLabel('Erlaubte Datei-Endungen');
 
-//        $lang = array(array("id" => "en", "name" => "English"), array("id" => "de", "name" => "Deutsch"));
-//        $form->createElement("select")
-//                ->setName('lang')
-//                ->setID('lw_listtool_lang')
-//                ->setLabel('Sprache')
-//                ->setValues($lang)
-//                ->setRequired('Bitte eine Auswahl treffen!')
-//                ->setFilter('striptags');
-//
         $form->createElement("checkbox")
                 ->setName('use_custom_css')
                 ->setID('lw_use_custom_css')

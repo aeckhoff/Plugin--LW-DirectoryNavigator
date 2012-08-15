@@ -25,9 +25,6 @@ class lw_de_directory extends projectBasis
     {
     }
 
-    /**
-     * Verteilerfunktion
-     */
     function execute($isLoggedIn) 
     {
         if($isLoggedIn == true) {
@@ -72,9 +69,6 @@ class lw_de_directory extends projectBasis
         }
     }
 
-    /**
-     * Benennt ein ausgewaehltes Verzeichnis um.
-     */
     function rename()
     {
         $this->directoryObject->rename($this->request->getRaw("rename"));
@@ -86,19 +80,16 @@ class lw_de_directory extends projectBasis
         $files = $this->directoryObject->getDirectoryContents("file");
         $directories = $this->directoryObject->getDirectoryContents("dir");
 
-        #keine inhalte im verzeichnis gefunden => direktes löschen
         if (empty($directories) && empty($files)) {
             $this->directoryObject->delete();
             $this->redirectToParentList();
         } 
         else {
-            #inhalte gefunden => bestätigung zum löschen aller daten einfordern
             if ($this->request->getAlnum("confirm") == 1){
                 $this->directoryObject->delete(TRUE);
                 $this->redirectToParentList();
             }
             else {
-                #meldung anzeigen, ob verzeichnis mit allen daten gelöscht werden soll
                 if ($this->request->getRaw("reldir") == "home") {
                     $options = array(
                         "confirm" => "dirdeletion",

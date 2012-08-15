@@ -27,20 +27,12 @@ class lw_de_navigation extends projectBasis
         require_once( $this->config['path']['framework'].'markdown/markdown.php');
     }
 
-    /**
-     *Verteilerfunktion
-     * @return string 
-     */
     function execute($isLoggedIn) 
     {
         $this->isLoggedIn = $isLoggedIn;
         return $this->show();
     }
     
-    /**
-     *Anzeige des Plugins.
-     * @return string 
-     */
     function show() 
     {
         $this->response->useJquery();
@@ -49,7 +41,6 @@ class lw_de_navigation extends projectBasis
         
         $this->setErrorMessages($tpl);
         
-        #lösch bestätigung (verzeichnis, welches dateien enthält)
         if($this->request->getAlnum("confirm") == "dirdeletion"){
             $this->confirmDelete($tpl);    
         }
@@ -166,11 +157,6 @@ class lw_de_navigation extends projectBasis
         }
     }
     
-    /**
-     *Baut das Templatestück zusammen, womit der Verzeichnisinhalt dargestellt wird.
-     * @param array $contentArray
-     * @return string 
-     */
     function createContentDisplay() 
     {
         $DirArray = $this->getPreparedDirectoryEntries();
@@ -192,8 +178,6 @@ class lw_de_navigation extends projectBasis
                 $tpl = new lw_te($template);
                 
                 if ($content["name"] != "." && $content["name"] != ".." && $content["name"] != "lwdirinfo.txt") {
-                    
-                    #anzeigenamen kürzen, falls die zulang sind (um verschub im template zuvermeiden)
                     $tpl->reg("nameimdisplay", $content["name"]);
                     $tpl->reg("name", $content["name"]); #bezeichnung für die execute links rename/delete
                     $tpl->reg("datum", $content["datum"]);
@@ -204,7 +188,7 @@ class lw_de_navigation extends projectBasis
                     if ($content["type"] == "dir") {
                         $this->fillDirectoryRow($tpl, $content);
                     } 
-                    else { # CONTENT-TYPE FILE 
+                    else {
                         $this->fillFileRows($tpl, $content);
                     }
 
@@ -227,9 +211,8 @@ class lw_de_navigation extends projectBasis
         $angepasstername = substr($content["name"], 0, strlen($content["name"]) -1);
         $tpl->reg("angepasstername",$angepasstername);
         $tpl->reg("fileOrDir","Verzeichnis");
-        $tpl->setIfVar("dir"); # setzt folder icon
+        $tpl->setIfVar("dir");
                         
-        #logginstatus prüfen (nur eingeloggte user dürfen änderungen vornehmen
         if($this->isLoggedIn == true) {
             $tpl->setIfVar("showrenamebutton");
 
@@ -272,19 +255,11 @@ class lw_de_navigation extends projectBasis
         $tpl->setIfVar("file");
     }
     
-    /**
-     *Baut das Templatestück zusammen, womit die Breadcrumb-Navigation dargestellt wird. 
-     * @param string $strdir
-     * @return string
-     */
     function createBreadcrumbDisplay() 
     {
         $strdir = $this->directoryObject->getRelativePath()."/";
         if ($strdir != false) {
             $strdir = str_replace("//", "/", $strdir);
-            //die($strdir);
-            
-            #dir string zerlegen
             $explodeDir = explode("/", $strdir, -1);
             $k = 0;
             foreach ($explodeDir as $dir) {
@@ -292,13 +267,12 @@ class lw_de_navigation extends projectBasis
                     $template = file_get_contents(dirname(__FILE__) . '/../templates/navigation_breadcrumb_content.tpl.html');
                     $tpl = new lw_te($template);
                     $tpl->reg("dirname", $explodeDir[$k]);
-                    #dir string zusammensetzen ( mit den benötigten elementen)
                     for ($i = 0; $i <= $k; $i++) {
                         $paramDir .= $explodeDir[$i]."/" ;
                     }
                     $tpl->reg("link", $this->config["url"]["client"] . "index.php?index=" . $this->request->getInt("index") . "&module=navigation&cmd=show&dir=" . $paramDir);
                     $k++;
-                    $paramDir = ""; # $paramDir reset
+                    $paramDir = "";
                     $output .= $tpl->parse();
                 }
             }
@@ -306,11 +280,6 @@ class lw_de_navigation extends projectBasis
         }
     }
     
-    /**
-     *Baut den Verzeichnislink zusammen, um in das Oberverzeichnis wechseln zu können.
-     * @param string $strdir
-     * @return string 
-     */
     function directoryUp($strdir)
     {
         if($strdir == false || $strdir == "home") {
