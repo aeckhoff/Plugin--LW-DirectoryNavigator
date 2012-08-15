@@ -1,0 +1,61 @@
+<tr class="<!-- lw:var oddeven -->">
+    <td class="lwde_filename">
+        <a href="<!-- lw:var link -->" <!-- lw:if dir -->class="dir"<!-- lw:endif dir --><!-- lw:if file -->class="file"<!-- lw:endif file -->>
+            <!-- lw:var nameimdisplay -->
+        </a>
+    </td>
+    <td class="lwde_filesize"><!-- lw:var size --></td>
+    <td class="lwde_filetype"><!-- lw:var type --></td>
+    <td class="lwde_filedate"><!-- lw:var datum --></td>
+    <td class="lwde_filefunctions">
+
+        <!-- lw:if showdeletebutton -->
+        <a href="#" title="delete: <!-- lw:var name -->" onclick="
+
+            var type = '<!-- lw:var fileOrDir -->';
+            var linktype;
+            var cmdDeleteDirOrFile;
+
+            if(type == 'Datei') {
+                linktype = 'file'; 
+            }
+            else { 
+                linktype = 'directory'; 
+            };
+
+            if(confirm(type + ' [ <!-- lw:var name --> ] wirklich l&ouml;schen ?')) {
+                self.location.href='<!-- lw:var execute-link -->' + linktype + '&cmd=delete&dir=<!-- lw:var dir -->&file=<!-- lw:var file -->';
+            }
+
+           " class="delete <!-- lw:var oddeven -->"><span>del</span></a>
+        <!-- lw:endif showdeletebutton -->
+    </td>
+    <td class="lwde_filefunctions">
+        <!-- lw:if showrenamebutton -->
+        <a href="#" title="rename: <!-- lw:var name -->" onclick="
+
+            var type = '<!-- lw:var fileOrDir -->';
+
+            var eingabe = prompt('Bitte geben Sie den neuen ' + type +'-Namen ein:','<!-- lw:var angepasstername -->');
+
+            if (eingabe != null)
+            {      
+                eingabe = eingabe.replace(/[^A-Z a-z0-9_-]/g, '');  
+
+                var linktype;
+
+                if (type == 'Datei') {
+                    linktype = 'file'; 
+                }
+                else {
+                    linktype = 'directory'; 
+                };
+
+                self.location.href='<!-- lw:var execute-link -->' + linktype + '&cmd=edit&dir=<!-- lw:var dir -->&file=<!-- lw:var file -->&rename=' + eingabe;
+            }
+
+           " class="rename <!-- lw:var oddeven -->"><span>ren</span></a>
+        <!-- lw:endif showrenamebutton -->
+        
+    </td>
+</tr>

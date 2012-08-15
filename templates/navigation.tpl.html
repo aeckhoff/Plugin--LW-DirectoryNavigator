@@ -1,0 +1,96 @@
+<script>
+    $(document).ready(function(){
+    
+        $("#showInfoButton").click(function(){
+            $("#container_showInfo").hide();
+            $("#container_editInfo").show();
+        });
+        
+        $("#submit").click(function(){
+            $("#container_showInfo").show();
+            $("#container_editInfo").hide();
+        });
+        
+        $("#addNewDir").click(function(){
+            var eingabe = prompt('Bitte geben Sie den Namen fuer das neue Verzeichnis an :','');
+        
+            if (eingabe != null)
+            {      
+                eingabe = eingabe.replace(/[^A-Z a-z0-9_-]/g, '');            
+                self.location.href='<!-- lw:var adddir -->&name=' + eingabe;
+            }
+        });
+        
+        $("#addNewFile").click(function(){
+            self.location.href='<!-- lw:var addfile -->';
+        });
+        
+        <!-- lw:if error -->
+            alert("<!-- lw:var errorMsg -->");
+        <!-- lw:endif error -->
+
+        <!-- lw:if confirm -->
+            if(confirm('In dem Verzeichnis [ <!-- lw:var deleteANonEmptyDir --> ] befinden sich Daten. Verzeichnis mit allen Daten wirklich löschen ?')){
+                self.location.href='<!-- lw:var execute-link -->directory&cmd=delete&reldir=<!-- lw:var reldir -->&dir=<!-- lw:var dir -->&confirm=1';
+            }
+        <!-- lw:endif confirm -->
+        
+    });
+</script>
+
+<div id="directoryexplorer" class="clearfix">
+    
+    <h2>Directory Explorer</h2>
+
+    <div id="de_breadcrumb" class="clearfix">
+            <a href="<!-- lw:var startverzeichnis -->">&gt;home</a>
+            <!-- lw:var breadcrumbcontent -->
+    </div>
+
+    <div id="directoryinfo" class="clearfix">
+        <div id="container_showInfo">
+            <div id="showInfo"><!-- lw:var contentdirectoryinfo --></div>
+            <!-- lw:if showadditems -->
+            <a href="#" class="info" id="showInfoButton">edit Info</a>
+            <!-- lw:endif showadditems -->
+        </div>
+        <div id="container_editInfo">
+            <form action="<!-- lw:var dirinfoformaction -->" method="POST" >
+                <textarea name="textareaDirInfo"><!-- lw:var contentdirectoryinfoTA --></textarea>
+                <input id="submit" type="submit" value="save changes">
+                <input type="hidden" name="sent" value="1"/>  
+            </form>
+        </div>
+    </div>
+
+    <div class="lwde_add_buttons">
+        <!-- lw:if showadditems -->
+        <a href="#" id="addNewDir" class="adddir" title="add new directory"><span>add Dir</span></a>
+        | <a href="#" id="addNewFile" class="addfile" title="add new file"><span>add File</span></a>
+        <!-- lw:endif showadditems -->
+    </div>
+    
+
+    <div id="container_directorydisplay">
+        <table>
+            <thead>
+                <tr>
+                    <th>File/Dir</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- lw:if back -->
+                <tr class="even"> 
+                    <td colspan="6"><a class="back" href="<!-- lw:var backdir -->"><span>back</span></a></td>
+                </tr>
+                <!-- lw:endif back -->
+                <!-- lw:var directorycontent -->
+            </tbody>
+        </table>
+    </div>
+</div>

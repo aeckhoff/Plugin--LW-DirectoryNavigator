@@ -1,0 +1,37 @@
+<div id="directoryexplorer" class="clearfix">
+    <ul>
+        <li class="title"><h1>[ contentory ]</h1></li>
+        <li class="bezeichnung"><h2>lw_directoryexplorer</h2></li>
+    </ul>   
+    <div id="de_breadcrumb" class="clearfix">
+        <p>FILE-UPLOAD</p>
+    </div>
+
+    <div id="container_form" class="clearfix">
+        <h4>max file-size: <!-- lw:var maxfilesize --></h4>                
+        <h5>Wie soll mit Datein verfahren werden, die Sie hochladen m&ouml;chten und dieser Dateiname bereits existiert ?</h5>
+        <form action="<!-- lw:var formactionlink -->" method="POST" ENCTYPE="multipart/form-data">  
+            <div class="a"><input type="radio" name="radiobutton_upload" value="ablehnen" checked="checked">Die hochzuladende Datei soll abgelehnt werden.</div>
+            <div class="b"><input type="radio" name="radiobutton_upload" value="ueberschreiben">Die bestehende Datei soll ersetzt werden.</div>
+            <div class="a"><input type="radio" name="radiobutton_upload" value="suffix">An die hochzuladende Datei soll ein Suffix angehangen werden.</div>
+            <div class="b"><input class="upload" name="uploadfield" type="file"></div>
+            <div class="alast clearfix">
+                <input class="btnback" type="button" value="back" onclick="
+                           
+                    self.location.href='<!-- lw:var backlink -->';
+                           
+                       "/>
+                <input class="submit" type="submit" value="upload"/>
+            </div>
+            <input type="hidden" name="sent" value="1"/>  
+        </form>
+        
+        <!-- lw:if error -->
+        <script type="text/javascript">
+            
+            alert('<!-- lw:var errormsg -->');
+            
+        </script>
+        <!-- lw:endif error -->
+    </div>
+</div>
