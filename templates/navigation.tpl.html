@@ -40,12 +40,14 @@
 
 <div id="directoryexplorer" class="clearfix">
     
-    <h2>Directory Explorer</h2>
+    <h2>Directory Navigator</h2>
 
+    <!-- lw:if showBreadcrumb -->
     <div id="de_breadcrumb" class="clearfix">
             <a href="<!-- lw:var startverzeichnis -->">&gt;home</a>
             <!-- lw:var breadcrumbcontent -->
     </div>
+    <!-- lw:endif showBreadcrumb -->
 
     <div id="directoryinfo" class="clearfix">
         <div id="container_showInfo">
@@ -65,8 +67,11 @@
 
     <div class="lwde_add_buttons">
         <!-- lw:if showadditems -->
+        <!-- lw:if showNewDir -->
         <a href="#" id="addNewDir" class="adddir" title="add new directory"><span>add Dir</span></a>
-        | <a href="#" id="addNewFile" class="addfile" title="add new file"><span>add File</span></a>
+        |
+        <!-- lw:endif showNewDir -->
+        <a href="#" id="addNewFile" class="addfile" title="add new file"><span>add File</span></a>
         <!-- lw:endif showadditems -->
     </div>
     
@@ -90,6 +95,12 @@
                 </tr>
                 <!-- lw:endif back -->
                 <!-- lw:var directorycontent -->
+                
+                <tr>
+                    <td colspan="6" style="height:2px; border:0; padding:0; margin:0; background-color:#000000;line-height:2px; font-size:2px;">&nbsp;</td>
+                </tr>
+                
+                <!-- lw:var filecontent -->
             </tbody>
         </table>
     </div>

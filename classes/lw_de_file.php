@@ -26,6 +26,9 @@ class lw_de_file extends projectBasis
     {
     }
 
+    /**
+     * Verteilerfunktion
+     */
     function execute($isLoggedIn) 
     {
         switch ($this->request->getAlnum("cmd")) {
@@ -57,6 +60,9 @@ class lw_de_file extends projectBasis
         return $output;
     }
 
+    /**
+     * Es wird geprüft ob die Datei umbenannt werden kann, ansonsten wird eine Fehlermeldung angezeigt.
+     */
     function edit()
     {
         if (!$this->checkIfFilenameExists()) {
@@ -72,26 +78,63 @@ class lw_de_file extends projectBasis
         }
     }
     
+    /**
+     * Die Datei wird umbenannt.
+     * (Wenn die Datei sich in der erlaubten Verzeichnistiefe befindet)
+     * 
+     * @throws Exception 
+     */
     function rename() 
     {
-        $this->fileObject->rename($this->request->getRaw("rename") . "." . $this->fileObject->getExtension());
-        $this->redirectToActualList();
+        if($this->isFileInMaxDirLevel($this->fileObject->getPath()) == true){
+            $this->fileObject->rename($this->request->getRaw("rename") . "." . $this->fileObject->getExtension());
+            $this->redirectToActualList();
+        }else{
+            throw new Exception("rename file not allowed");
+        }
     }
     
+    /**
+     * Die ausgewählte Datei wird gelöscht.
+     * (Wenn die Datei sich in der erlaubten Verzeichnistiefe befindet)
+     * 
+     * @throws Exception 
+     */
     function delete() 
     {
-        $this->fileObject->delete();
-        $this->redirectToActualList();
+        if($this->isFileInMaxDirLevel($this->fileObject->getPath()) == true){
+            $this->fileObject->delete();
+            $this->redirectToActualList();
+        }
+        else{
+            throw new Exception("delete file not allowed");
+        }
     }    
     
+    /**
+     * Die ausgewählte Datei wird zum Download bereitgestellt.
+     * (Wenn die Datei sich in der erlaubten Verzeichnistiefe befindet)
+     * 
+     * @throws Exception 
+     */
     function download() 
     {
-        $content = file_get_contents($this->fileObject->getFullPath());
-        header('Content-Type: application/octet-stream;');
-        header("Content-Disposition: attachment; filename=\"" . $this->fileObject->getFilename() . "\";");
-        die($content);
+        if($this->isFileInMaxDirLevel($this->fileObject->getPath()) == true){
+            $content = file_get_contents($this->fileObject->getFullPath());
+            header('Content-Type: application/octet-stream;');
+            header("Content-Disposition: attachment; filename=\"" . $this->fileObject->getFilename() . "\";");
+            die($content);
+        }
+        else{
+            throw new Exception("download file not allowed");
+        }
     }    
     
+    /**
+     * Es wird geürpft, ob der Dateiname bereits in dem aktuellem Verzeichnis vorhanden ist.
+     * 
+     * @return boolean 
+     */
     function checkIfFilenameExists() 
     {
         $filename = $this->fileObject->getFilename();
@@ -105,12 +148,16 @@ class lw_de_file extends projectBasis
         $this->redirectToActualList();
     }
 
+    /**
+     * Das Uploadformular wird angezeigt.
+     * 
+     * @return string
+     */
     function showUploadForm() 
     {
         $tpl = new lw_te(file_get_contents(dirname(__FILE__) . '/../templates/upload.tpl.html'));
-        
-        $tpl->reg("backlink", $this->config["url"]["client"] . "index.php?index=" . $this->request->getInt("index") . "&module=navigation&cmd=show&dir=" . $this->request->getRaw("dir"));;    
-        $tpl->reg("formactionlink", $this->config["url"]["client"] . "index.php?index=" . $this->request->getInt("index") . "&module=file&cmd=new&dir=" . $this->request->getRaw("dir"));
+        $tpl->reg("backlink", $this->buildLink("navigation", "show", $this->request->getRaw("dir")));
+        $tpl->reg("formactionlink", $this->buildLink("file", "new", $this->request->getRaw("dir")));
         $tpl->reg("maxfilesize", ini_get('post_max_size')."b");
         
         $fileDataArray = $this->request->getFileData("uploadfield");
@@ -123,6 +170,13 @@ class lw_de_file extends projectBasis
         return $tpl->parse();
     }
 
+    /**
+     * Die entsprechende Fehlermeldung wird ausgegeben.
+     * 
+     * @param string $tpl
+     * @param array $fileDataArray
+     * @return boolean 
+     */
     function showErrorMessages($tpl, $fileDataArray)
     {
         if($this->request->getAlnum("refuse") && $this->request->getAlnum("refuse") == 1){
@@ -157,6 +211,13 @@ class lw_de_file extends projectBasis
         return false;
     }
     
+    /**
+     * Aus dem Dateinamen der hochzuladenen Datei werden unerwünschte Zeichen entfernt.
+     * Die Endung der hochzuladenen Datei wird geprüft.
+     * 
+     * @param type $fileDataArray
+     * @param type $uploadExtension 
+     */
     function checkUploadFilenameandUpload($fileDataArray,$uploadExtension) 
     {
         if ($this->directoryObject->isExtensionAllowed($uploadExtension)) {
@@ -177,6 +238,12 @@ class lw_de_file extends projectBasis
         }
     }
     
+    /**
+     * Ist der Dateiname, der hochzuladenen Datei, vorhanden, wird die entsprechende Verfahrensweise angewand.
+     * 
+     * @param array $fileDataArray
+     * @return type 
+     */
     function getFilenameInCaseOfExistingSameFilename($fileDataArray) 
     {
         switch ($this->request->getAlnum("radiobutton_upload")) {
@@ -192,6 +259,12 @@ class lw_de_file extends projectBasis
         }
     }
 
+    /** 
+     * Die übergebene Dateigröße wird in Bytes umgerechnet.
+     * 
+     * @param float $size
+     * @return int 
+     */
     function maxFileSizePostInBytes($size) 
     {
         $stringEnd = strtolower(substr($size, strlen($size)-1, 1));

@@ -28,6 +28,14 @@ class lw_de_fileObject
         $this->file = $this->filterVar($file);
     }
     
+    /**
+     * Die Instanz eines Dateiobjekts wird zurückgegeben.
+     * 
+     * @param string $dir
+     * @param string $file
+     * @param string $config
+     * @return object
+     */
     public function getInstance($dir, $file, $config) 
     {
         if (!is_object($this->fileObjectContainer[$dir->getActualPath().$file])) {
@@ -38,6 +46,12 @@ class lw_de_fileObject
         return $this->fileObjectContainer[$dir->getActualPath().$file];
     }
     
+    /**
+     * Unerwünschte Zeichen werden aus der Variable entfernt.
+     * 
+     * @param string $var
+     * @return string 
+     */
     function filterVar($var) 
     {
         $var = str_replace("..", "", $var);
@@ -50,7 +64,7 @@ class lw_de_fileObject
     {
         $this->configuration = $config;
     }
-    
+
     public function init()
     {
         $path = $this->dir->getActualPath();
@@ -63,31 +77,62 @@ class lw_de_fileObject
         $this->fileObject = lw_file::getInstance($path, $this->file);
     }
     
+    /**
+     * Ausgewählte Datei wird umbenannt.
+     * 
+     * @param string $name
+     * @return boolean 
+     */
     function rename($name)
     {
         return $this->fileObject->rename($name);
     }
     
+    /**
+     * Ausgewählte Datei wird gelöscht.
+     * 
+     * @return boolean 
+     */
     function delete()
     {
         return $this->fileObject->delete();
     }
     
+    /**
+     * Die Dateiendung wird zurückgegeben.
+     * 
+     * @return string 
+     */
     function getExtension()
     {
         return $this->fileObject->getExtension();
     }
     
+    /**
+     * Der Pfad + Dateiname wird zurückgegeben.
+     * 
+     * @return string 
+     */
     function getFullPath()
     {
         return $this->fileObject->getPath().$this->fileObject->getFilename();
     }
     
+    /**
+     * Der Pfad ohne Dateiname wird zurückgegeben.
+     * 
+     * @return string 
+     */
     function getPath()
     {
         return $this->fileObject->getPath();
     }
     
+    /**
+     * Der Dateiname wird zurückgegeben.
+     * 
+     * @return string 
+     */
     function getFilename()
     {
         return $this->fileObject->getFilename();

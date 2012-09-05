@@ -76,16 +76,47 @@ class projectBasis extends lw_object
         $this->response = $response;
     }
     
+    function hideBreadcrumb($bool)
+    {
+        if ($bool) {
+            $this->hideBreadcrumb = true;
+        }
+        else {
+            $this->hideBreadcrumb = false;
+        }
+    }
+    
+    /**
+     * Klassen Verzeichnisobjekt
+     * 
+     * @param object $object 
+     */
     function setDirectoryObject($object)
     {
         $this->directoryObject = $object;
     }
     
+    /**
+     * Klassen Dateiobjekt
+     * 
+     * @param object $object 
+     */
     function setFileObject($object) 
     {
         $this->fileObject = $object;
     }
     
+    /**
+     * Es wird aus den Übergabeparametern eine URL zusammengebaut, die an die entsprechende
+     * Stellen in dem Template eingesetzt wird.
+     * 
+     * @param string $module
+     * @param string $cmd
+     * @param string $dir
+     * @param string $file
+     * @param array $options
+     * @return string 
+     */
     function buildLink($module, $cmd, $dir=false, $file=false, $options=false)
     {
         $array['index'] = $this->request->getInt("index");
@@ -105,14 +136,118 @@ class projectBasis extends lw_object
         return $url;
     }
     
+    /**
+     * Link für navigation_direcotry_content Template ( Delete/Rename Links)
+     * 
+     * @return string
+     */
+    function getExecuteLink()
+    {
+        return $this->config["url"]["client"] . "index.php?index=" . $this->request->getInt("index") . "&module=" ;
+    }
+    
+    /**
+     * Weiterleitung zum Oberverzeichnis.
+     */
     function redirectToParentList() 
     {
         $parentObject = $this->directoryObject->getActualParentObject();
         lw_object::pageReload($this->buildLink('navigation', 'show', $parentObject->getRelativePath()));
     }
 
+    /**
+     * Aktuelles Verzeichnis wird neu geladen. 
+     */
     function redirectToActualList() 
     {
         lw_object::pageReload($this->buildLink('navigation', 'show', $this->directoryObject->getRelativePath()));
+    }
+    
+    /**
+     * Klassenvaribale wird gesetzt mit der Eingabe im Backend "Max. Verzeichnistiefe"
+     * 
+     * @param int $levels 
+     */
+    function setMaxDirLevels($levels) 
+    {
+        $this->maxDirLevels = $levels;
+    }
+    
+    /**
+     * Klassenvaribale wird gesetzt mit der Eingabe im Backend "Benutzerdefiniertes CSS verwenden"
+     * 
+     * @param int $levels 
+     */
+    function setUseOnlyHome_lwdirinfo($use) 
+    {
+        if($use == 1){
+            $this->useOnlyHomeDir_lwdirinfo = true;
+        }
+    }
+    
+    /**
+     * Klassenvaribale wird gesetzt mit der Eingabe im Backend "Baumstruktur anzeigen"
+     * 
+     * @param int $levels 
+     */
+    function setTreeView($use) 
+    {
+        if($use == 1){
+            $this->treeView = true;
+        }
+    }
+    
+    /**
+     * Prüft ob die Verzeichnistiefe, die angegebene Max.-Verzeichnistiefe, nicht überschreitet
+     * @param string $relpath
+     * @return boolean 
+     */
+    function checkDirLevel($relPath = false)
+    {
+        if($this->maxDirLevels == 0){
+            return false;
+        }
+        if($relPath != false){
+
+            $relPath = $relPath . "/";
+            $explodeDir = explode("/", $relPath, -1);
+            $index = count($explodeDir);
+            
+            if($index <= $this->maxDirLevels -1){
+                return true;
+            }
+        }
+        if($this->maxDirLevels != 0 && $relPath == false){
+            return true;
+        }
+    }
+    
+    /**
+     * Prüft ob die Datei sich innerhalb der erlaubten Max.Verzeichnistiefe befindet
+     * @param string $filepath
+     * @return boolean 
+     */
+    function isFileInMaxDirLevel($filepath)
+    {
+        $relFilePath = str_replace($this->config["path"]["resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $filepath);
+
+        if($relFilePath == false && $this->maxDirLevels == 0){
+            return true;
+        }
+        
+        if($relFilePath != false){
+            $explodeDir = explode("/", $relFilePath, -1);
+            $index = count($explodeDir);
+            
+            if($index > $this->maxDirLevels){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        if($this->maxDirLevels != 0 && $relFilePath == false){
+            return true;
+        }
     }
 }

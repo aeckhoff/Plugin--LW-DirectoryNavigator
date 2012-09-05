@@ -30,7 +30,12 @@ class backend extends projectBasis
     {
         $parameter['homedir'] = $this->request->getRaw("homedir");
         $parameter['allowedExtensions'] = $this->request->getRaw("allowedExtensions");
+        $parameter['maxDirLevels'] = $this->request->getInt("maxDirLevels");
         $parameter['use_custom_css'] = $this->request->getInt("use_custom_css");
+        $parameter['use_only_lwdirinfo_homedir'] = $this->request->getInt("use_only_lwdirinfo_homedir");
+        $parameter['treeView'] = $this->request->getInt("treeView");
+        $parameter['nobreadcrumb'] = $this->request->getInt("nobreadcrumb");
+        
         $content = false;
         $this->repository->plugins()->savePluginData($this->getPluginName(), $this->getOid(), $parameter, $content);
         $this->pageReload($this->buildURL(false, array("pcmd")));
@@ -64,6 +69,11 @@ class backend extends projectBasis
                 ->setName('allowedExtensions')
                 ->setID('lw_allowedExtensions')
                 ->setLabel('Erlaubte Datei-Endungen');
+        
+        $form->createElement("textfield")
+                ->setName('maxDirLevels')
+                ->setID('lw_maxDirLevels')
+                ->setLabel('Max. Verzeichnistiefe (nach Home)');
 
         $form->createElement("checkbox")
                 ->setName('use_custom_css')
@@ -73,6 +83,30 @@ class backend extends projectBasis
                 ->setFilter('striptags')
                 ->setValidation('hasMaxlength', array('value' => 1), 'Der Wert darf maximal 1 Zeichen lang sein!');
 
+        $form->createElement("checkbox")
+                ->setName('use_only_lwdirinfo_homedir')
+                ->setID('lw_use_only_lwdirinfo_homedir')
+                ->setLabel('Nur die "lwdirinfo" vom Startverzeichnis verwenden?')
+                ->setValue(1)
+                ->setFilter('striptags')
+                ->setValidation('hasMaxlength', array('value' => 1), 'Der Wert darf maximal 1 Zeichen lang sein!');
+        
+        $form->createElement("checkbox")
+                ->setName('treeView')
+                ->setID('lw_treeView')
+                ->setLabel('Baumstruktur anzeigen ?')
+                ->setValue(1)
+                ->setFilter('striptags')
+                ->setValidation('hasMaxlength', array('value' => 1), 'Der Wert darf maximal 1 Zeichen lang sein!');
+        
+        $form->createElement("checkbox")
+                ->setName('nobreadcrumb')
+                ->setID('lw_breadcrumb')
+                ->setLabel('Breadcrumb ausblenden?')
+                ->setValue(1)
+                ->setFilter('striptags')
+                ->setValidation('hasMaxlength', array('value' => 1), 'Der Wert darf maximal 1 Zeichen lang sein!');
+        
         $form->createElement('button')
                 ->setTarget('admin.php')
                 ->setValue('abbrechen');

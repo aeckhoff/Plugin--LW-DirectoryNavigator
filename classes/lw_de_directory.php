@@ -25,6 +25,12 @@ class lw_de_directory extends projectBasis
     {
     }
 
+    /**
+     * Verteilerfunktion
+     * 
+     * @param boolean $isLoggedIn
+     * @throws Exception 
+     */
     function execute($isLoggedIn) 
     {
         if($isLoggedIn == true) {
@@ -69,45 +75,77 @@ class lw_de_directory extends projectBasis
         }
     }
 
+    /**
+     * Das ausgewählte Verzeichnis wird umbenannt, wenn es sich in der Max.
+     * Verzeichnistiefe befindet.
+     * 
+     * @throws Exception 
+     */
     function rename()
     {
-        $this->directoryObject->rename($this->request->getRaw("rename"));
-        $this->redirectToParentList();
-    }
-
-    function delete() 
-    {
-        $files = $this->directoryObject->getDirectoryContents("file");
-        $directories = $this->directoryObject->getDirectoryContents("dir");
-
-        if (empty($directories) && empty($files)) {
-            $this->directoryObject->delete();
+        if($this->checkDirLevel($this->directoryObject->getRelativePath()) == true){
+            $this->directoryObject->rename($this->request->getRaw("rename"));
             $this->redirectToParentList();
-        } 
-        else {
-            if ($this->request->getAlnum("confirm") == 1){
-                $this->directoryObject->delete(TRUE);
-                $this->redirectToParentList();
-            }
-            else {
-                if ($this->request->getRaw("reldir") == "home") {
-                    $options = array(
-                        "confirm" => "dirdeletion",
-                        "reldir" => $this->directoryObject->getActualParentObject()->getRelativePath(),
-                        "delete" => $this->directoryObject->getName()
-                    );
-                    lw_object::pageReload($this->buildLink("navigation", "show", $this->directoryObject->getRelativePath(), false, $options));
-                }
-                else {
-                    $this->redirectToActualList();
-                }
-            }
+        }
+        else{
+            throw new Exception("rename dir not allowed");
         }
     }
 
+    /**
+     * Das ausgewählte Verzeichnis wird gelöscht, wenn es sich in der Max.
+     * Verzeichnistiefe befindet.
+     * 
+     * @throws Exception 
+     */
+    function delete() 
+    {
+        if($this->checkDirLevel($this->directoryObject->getRelativePath()) == true){
+            $files = $this->directoryObject->getDirectoryContents("file");
+            $directories = $this->directoryObject->getDirectoryContents("dir");
+
+            if (empty($directories) && empty($files)) {
+                $this->directoryObject->delete();
+                $this->redirectToParentList();
+            } 
+            else {
+                if ($this->request->getAlnum("confirm") == 1){
+                    $this->directoryObject->delete(TRUE);
+                    $this->redirectToParentList();
+                } 
+                else {
+                    if ($this->request->getRaw("reldir") == "home") {
+                        $options = array(
+                            "confirm" => "dirdeletion",
+                            "reldir" => $this->directoryObject->getActualParentObject()->getRelativePath(),
+                            "delete" => $this->directoryObject->getName()
+                        );
+                        lw_object::pageReload($this->buildLink("navigation", "show", $this->directoryObject->getRelativePath(), false, $options));
+                    }
+                    else {
+                        $this->redirectToActualList();
+                    }
+                }
+            }
+        }
+        else{
+            throw new Exception("delete dir not allowed");
+        }
+    }
+
+    /**
+     * In das ausgewählte Verzeichnis wird ein neues Verzeichnis angelegt.
+     * 
+     * @throws Exception 
+     */
     function addNewDir()
     {
-        $this->directoryObject->add($this->request->getAlnum("name"));
-        $this->redirectToActualList();
+        if($this->checkDirLevel($this->directoryObject->getRelativePath()) == true){
+            $this->directoryObject->add($this->request->getAlnum("name"));
+            $this->redirectToActualList();
+        }
+        else{
+            throw new Exception("add new dir not allowed");
+        }
     }
 }

@@ -1,12 +1,18 @@
+<!-- lw:if showCompleteRow -->
 <tr class="<!-- lw:var oddeven -->">
-    <td class="lwde_filename">
-        <a href="<!-- lw:var link -->" <!-- lw:if dir -->class="dir"<!-- lw:endif dir --><!-- lw:if file -->class="file"<!-- lw:endif file -->>
-            <!-- lw:var nameimdisplay -->
-        </a>
+    <td class="lwde_filename" <!-- lw:if colspan -->colspan="4"<!-- lw:endif colspan -->>
+        <!-- lw:if treeView --><div style="margin-left: <!-- lw:var margin-left -->px;"><!-- lw:endif treeView -->
+            <a href="<!-- lw:var link -->" <!-- lw:if dir -->class="dir"<!-- lw:endif dir --><!-- lw:if file -->class="file"<!-- lw:endif file --><!-- lw:if opendir -->class="opendir"<!-- lw:endif opendir -->>
+                <!-- lw:var nameimdisplay -->
+            </a>
+        <!-- lw:if treeView --></div><!-- lw:endif treeView -->
     </td>
+    <!-- lw:if showAllInfos -->
     <td class="lwde_filesize"><!-- lw:var size --></td>
     <td class="lwde_filetype"><!-- lw:var type --></td>
     <td class="lwde_filedate"><!-- lw:var datum --></td>
+    <!-- lw:endif showAllInfos -->
+    
     <td class="lwde_filefunctions">
 
         <!-- lw:if showdeletebutton -->
@@ -59,3 +65,5 @@
         
     </td>
 </tr>
+<!-- lw:endif showCompleteRow -->
+<!-- lw:var treeView -->
