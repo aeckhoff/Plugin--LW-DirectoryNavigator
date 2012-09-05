@@ -1,0 +1,358 @@
+            /* ~~~~ lw_directoryexplorer css ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+            .clearfix:after {
+                content: ".";
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+            #directoryexplorer {
+                width: 550px;
+                font-family: verdana,arial;
+                color: #fff;
+                margin: auto;
+            }
+
+            #directoryexplorer h2 {
+                font-weight: bold;
+                font-size:18px;                
+                margin: 0;
+                padding-bottom: 10px;
+            }
+
+            /* ~~~~ BREADCRUMB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+            #de_breadcrumb a{color: #000}
+            
+            #de_breadcrumb {
+                border-top: 1px solid #fff;
+                border-bottom: 1px solid #fff;
+                margin: 5px 0 0 0;
+            }
+
+            #de_breadcrumb ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            #de_breadcrumb li a.breadcrumb {
+                float: left;
+                padding: 0 5px 0 5px;
+                font-size: 12px;
+                color: #000;
+                display: block;
+                text-decoration: none;
+                border-right: 1px solid #fff;
+                border-bottom: 1px solid #fff;
+            }
+
+            #de_breadcrumb li a:hover {
+                color: #00c;
+            }
+
+            /* ~~~~ DIRECTORYINFO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+            #directoryinfo {
+                background-color: #dfdfdf;
+                margin: 5px 0px 5px 0px;
+                color: #000;
+                font-size:14px;
+            }
+
+            #directoryinfo textarea {
+                margin: 20px 5px 5px 5px;
+            }
+
+            #directoryinfo a.info {
+                color: #fff;
+                display: block;
+                background-color: #333;
+                font-size: 12px;
+                text-decoration: none;
+                width: 80px;
+                text-align: center;
+                margin: 0px 0px 5px 5px;
+            }
+
+            #directoryinfo a.adddir {
+                display: block;
+                padding: 2px;
+                text-decoration: none;
+                float: right;
+                width: 42px;
+            }
+            
+            #directoryinfo a.addfile {
+                display: block;
+                padding: 2px;
+                text-decoration: none;
+                float: right;
+                width: 42px;
+            }
+
+            #directoryinfo #showInfo {
+                margin: 20px 5px 5px 5px;
+                padding: 5px 3px 20px 3px;
+                font-size: 12px;
+                float: none;
+            }
+            
+            #directoryinfo #showInfo h1 {
+                font-weight: bold;
+                font-size: 20px;
+            }
+            
+            #directoryinfo #showInfo p {
+                padding: 3px;
+                font-size: 12px;
+            }
+            
+            #directoryinfo #showInfo h2 {
+                font-weight: bold;
+                font-size: 16px;
+            }
+            
+            #directoryinfo #showInfo ul {
+                list-style: square;
+                background-color:#dfdfdf;
+            }
+            
+            #directoryinfo #showInfo ul li {
+                list-style: square;
+                padding-top: 4px;
+                float: none;
+                margin-left: 40px;
+                background-color:#dfdfdf;
+                color:#000;
+                font-size:12px;
+                font-weight:normal;
+            }
+
+            #directoryinfo #container_editInfo {
+                display: none;
+            }
+
+            #directoryinfo #container_editInfo #submit {
+                color: #fff;
+                display: block;
+                background-color: #333;
+                font-size: 12px;
+                text-decoration: none;
+                text-align: center;
+                margin: 0px 0px 5px 5px;
+                border: none;
+                cursor: pointer;
+            }
+
+            #directoryinfo #container_editInfo textarea {
+                font-family: verdana,arial;
+                font-size:12px;
+                height:250px;
+                width:528px;
+            }
+
+            /* ~~~~ ADD BUTTONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            
+            div.lwde_add_buttons {
+                margin-bottom:10px;
+            }
+
+            div.lwde_add_buttons a {
+                color:#000000;
+            }
+
+            div.lwde_add_buttons a span {
+                margin-left:20px;
+            }
+
+            div.lwde_add_buttons a.addfile {
+                background: url("{_imageurl_}/16x16_0500/image_add.png") no-repeat top left;
+            }
+
+            div.lwde_add_buttons a.adddir {
+                background: url("{_imageurl_}/16x16_0440/folder_add.png") no-repeat top left;
+            }
+
+            
+            /* ~~~~ DIRECTORYDISPLAY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+            #container_directorydisplay {
+                
+            }
+            
+            #container_directorydisplay table {
+                border-collapse:collapse;
+                width:100%;
+                color:#000;
+                border:0px solid white;
+            }
+            
+            #container_directorydisplay table thead tr {
+                background-color:#fff;
+            }
+            
+            #container_directorydisplay table thead tr th {
+                text-align:left;
+                border-bottom:2px solid black;
+            }
+
+            #container_directorydisplay table tbody tr.odd {
+                background-color: #bbbbbb;
+            }
+            
+            #container_directorydisplay table tbody tr.even {
+                background-color: #dfdfdf;
+            }
+            
+            #container_directorydisplay table tbody tr.trenner {
+                border-top: 2px solid #000;
+                border-bottom: 2px solid #000;
+                background-color: #fff;
+                font-size: 10px;
+            }
+            
+            #container_directorydisplay table tbody tr.trenner span.activeDir{
+                font-size: 10px;
+                font-weight: bold;
+            }
+            
+            #container_directorydisplay table tbody tr a {
+                color:#000;
+            }
+            
+            
+            #container_directorydisplay table tbody tr td.lwde_filename a.file {
+                padding-left:20px;
+                background: url("{_imageurl_}/16x16_0480/image.png") no-repeat top left;
+            }
+
+            #container_directorydisplay table tbody tr td.lwde_filename a.dir {
+                padding-left:20px;
+                background: url("{_imageurl_}/16x16_0440/folder_go.png") no-repeat top left;
+            }
+            
+            #container_directorydisplay table tbody tr td.lwde_filename a.opendir {
+                padding-left:20px;
+                background: url("{_imageurl_}/16x16_0440/folder.png") no-repeat top left;
+            }
+            
+            #container_directorydisplay table tbody tr td a.back {
+                padding-left:20px;
+                background: url("{_imageurl_}/16x16_0060/arrow_left.png") no-repeat top left;
+            }
+
+            #container_directorydisplay table tbody tr td a.delete {
+                background: url("{_imageurl_}/16x16_0340/delete.png") no-repeat top left;
+                display:block;
+                width:20px;
+                height:16px;
+            }
+
+            #container_directorydisplay table tbody tr td a.rename {
+                background: url("{_imageurl_}/16x16_0700/pencil.png") no-repeat top left;
+                display:block;
+                width:20px;
+                height:16px;
+                float:left;
+            }
+
+            #container_directorydisplay table tbody tr td a.delete span, #container_directorydisplay table tbody tr td a.rename span {
+                display:none;
+            }
+            /* ~~~~ UPLOADFORMULAR ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+            #container_form {
+                padding: 5px;
+                margin: 10px 5px 5px 5px;
+                border: 1px solid #000;
+                font-size: 12px;
+                color: #000;
+            }
+
+            #container_form h4,#container_form h5 {
+                margin: 0;
+                padding: 2px;
+                background-color: #bbb;
+                color: #000;
+                border: 1px solid #fff;
+                border-bottom: none;
+                font-size: 12px;
+            }
+
+            #container_form h5 {
+                padding: 4px;
+                background-color: #dfdfdf;
+                border-top: none;
+                font-size: 12px;
+                font-weight: normal;
+                text-align: center;
+            }
+
+            #container_form .a {
+                background-color: #bbb;
+                border-left: 1px solid #fff;
+                border-right: 1px solid #fff;
+                padding: 5px 2px;
+            }
+
+            #container_form .alast {
+                border: 1px solid #fff;
+                border-top: none;
+                background-color: #bbb;
+                padding: 5px 2px;
+            } 
+
+            #container_form .b {
+                background-color: #dfdfdf;
+                border-left: 1px solid #fff;
+                border-right: 1px solid #fff;
+                padding: 5px 2px;
+            }
+
+            #container_form input.submit {
+                float: right;
+            }
+
+            #container_form input.btnback {
+                float: left;
+            }
+
+            #container_form .upload {
+                margin-left: 50px;
+            }
+            
+            /* ~~~~ ERROR-MSGs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            
+            #de_error{
+                background-color: #7c0000;
+                color: #fff;
+                padding: 2px;
+                border: 3px solid darkred;
+            }
+            
+            #de_error h2{
+                background: url("{_imageurl_}/16x16_0400/exclamation.png") 3px 2px no-repeat;
+                font-size: 16px;
+                font-weight: bold;
+                padding: 0;
+                padding-left: 30px;
+            }
+            
+            #de_error p{
+                font-size: 12px;
+                margin-left: 10px;
+            }
+            
+            #de_error a{
+                float: right;
+                font-size: 12px;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            /* ~~~~ lw_directoryexplorer css end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
