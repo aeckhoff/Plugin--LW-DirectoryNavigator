@@ -1,2 +1,2 @@
-Plugin--LW-DirectoryExplorer
-============================
+Plugin--LW-DirectoryNavigator
+=============================
