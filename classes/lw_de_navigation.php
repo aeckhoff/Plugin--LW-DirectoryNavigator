@@ -58,10 +58,22 @@ class lw_de_navigation extends projectBasis
                 $tpl->reg("backdir" , $this->directoryUp($this->directoryObject->getRelativePath())); # ins oberverzeichnis wechseln
             }
         }
-        
+
         $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
         $length = strlen($path) - strlen($this->directoryObject->getName());
         $relPath = substr($path, 0, $length);
+
+        if($this->treeView) {
+            $tpl->setIfVar("home");
+            if ($this->getDirLevel($path)==0) {
+                $tpl->setIfVar("actualdir");
+            }
+            else {
+                $tpl->setIfVar("opendir");
+            }
+            $tpl->reg("home_margin_left" , -8);
+            $tpl->reg("home_link" , $this->buildLink('navigation', 'show', 'home'));
+        }
         
         if($this->isLoggedIn == true) {
             $tpl->setIfVar("showadditems");
@@ -75,12 +87,12 @@ class lw_de_navigation extends projectBasis
         
         $this->executeFileInformation($tpl);
         
-            if($this->directoryObject->getName() == $this->directoryObject->getHomeDir() || $this->directoryObject->getName() == "lw_directorynavigator/"){
-                $tpl->reg("activedirectory", "home/");
-            }
-            else{
-                $tpl->reg("activedirectory", $this->directoryObject->getName());
-            }
+        if($this->directoryObject->getName() == $this->directoryObject->getHomeDir() || $this->directoryObject->getName() == "lw_directorynavigator/"){
+            $tpl->reg("activedirectory", "home/");
+        }
+        else{
+            $tpl->reg("activedirectory", $this->directoryObject->getName());
+        }
         $tpl->reg("directorycontent", $this->createDirectoryContentDisplay());
         $tpl->reg("filecontent", $this->createFileContentDisplay());
         

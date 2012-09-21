@@ -40,8 +40,6 @@
 
 <div id="directoryexplorer" class="clearfix">
     
-    <h2>Directory Navigator</h2>
-
     <!-- lw:if showbreadcrumb -->
     <div id="de_breadcrumb" class="clearfix">
             <a href="<!-- lw:var startverzeichnis -->">&gt;home</a>
@@ -94,6 +92,17 @@
                     <td colspan="6"><a class="back" href="<!-- lw:var backdir -->"><span>back</span></a></td>
                 </tr>
                 <!-- lw:endif back -->
+                <!-- lw:if home -->
+                <tr class="even <!-- lw:if actualdir -->actual<!-- lw:endif actualdir -->"> 
+                    <td colspan="6" class="lwde_filename">
+                        <div style="margin-left: <!-- lw:var home_margin_left -->px;">
+                            <a href="<!-- lw:var home_link -->" <!-- lw:if actualdir -->class="actual"<!-- lw:endif actualdir --><!-- lw:if dir -->class="dir"<!-- lw:endif dir --><!-- lw:if file -->class="file"<!-- lw:endif file --><!-- lw:if opendir -->class="opendir"<!-- lw:endif opendir -->>
+                                <span>Home</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <!-- lw:endif home -->
                 <!-- lw:var directorycontent -->
                 <tr class="trenner">>
                     <td colspan="6">&nbsp; Files in: <span class="activeDir">&nbsp;<!-- lw:var activedirectory --><span></td>
