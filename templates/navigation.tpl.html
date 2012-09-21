@@ -31,7 +31,7 @@
 
         <!-- lw:if confirm -->
             if(confirm('In dem Verzeichnis [ <!-- lw:var deleteANonEmptyDir --> ] befinden sich Daten. Verzeichnis mit allen Daten wirklich löschen ?')){
-                self.location.href='<!-- lw:var execute-link -->directory&cmd=delete&reldir=<!-- lw:var reldir -->&dir=<!-- lw:var dir -->&confirm=1';
+                self.location.href='<!-- lw:var execute-link -->directory&cmd=delete&dir=<!-- lw:var reldir --><!-- lw:var dir -->&confirm=1';
             }
         <!-- lw:endif confirm -->
         
@@ -42,12 +42,12 @@
     
     <h2>Directory Navigator</h2>
 
-    <!-- lw:if showBreadcrumb -->
+    <!-- lw:if showbreadcrumb -->
     <div id="de_breadcrumb" class="clearfix">
             <a href="<!-- lw:var startverzeichnis -->">&gt;home</a>
             <!-- lw:var breadcrumbcontent -->
     </div>
-    <!-- lw:endif showBreadcrumb -->
+    <!-- lw:endif showbreadcrumb -->
 
     <div id="directoryinfo" class="clearfix">
         <div id="container_showInfo">
@@ -95,11 +95,9 @@
                 </tr>
                 <!-- lw:endif back -->
                 <!-- lw:var directorycontent -->
-                
-                <tr>
-                    <td colspan="6" style="height:2px; border:0; padding:0; margin:0; background-color:#000000;line-height:2px; font-size:2px;">&nbsp;</td>
+                <tr class="trenner">>
+                    <td colspan="6">&nbsp; Files in: <span class="activeDir">&nbsp;<!-- lw:var activedirectory --><span></td>
                 </tr>
-                
                 <!-- lw:var filecontent -->
             </tbody>
         </table>

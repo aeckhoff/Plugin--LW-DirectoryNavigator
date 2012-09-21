@@ -38,12 +38,13 @@ class lw_de_fileObject
      */
     public function getInstance($dir, $file, $config) 
     {
-        if (!is_object($this->fileObjectContainer[$dir->getActualPath().$file])) {
-            $this->fileObjectContainer[$dir->getActualPath().$file] = new lw_de_fileObject($dir, $file);
-            $this->fileObjectContainer[$dir->getActualPath().$file]->setConfiguration($config);
-            $this->fileObjectContainer[$dir->getActualPath().$file]->init();
+     #   die($dir->getPath().$file);
+        if (!is_object($this->fileObjectContainer[$dir->getPath().$file])) {
+            $this->fileObjectContainer[$dir->getPath().$file] = new lw_de_fileObject($dir, $file);
+            $this->fileObjectContainer[$dir->getPath().$file]->setConfiguration($config);
+            $this->fileObjectContainer[$dir->getPath().$file]->init();
         }
-        return $this->fileObjectContainer[$dir->getActualPath().$file];
+        return $this->fileObjectContainer[$dir->getPath().$file];
     }
     
     /**
@@ -67,7 +68,7 @@ class lw_de_fileObject
 
     public function init()
     {
-        $path = $this->dir->getActualPath();
+        $path = $this->dir->getPath();
         if (!is_dir($path)) {
             throw new Exception("invalid directory: ".$path);
         }

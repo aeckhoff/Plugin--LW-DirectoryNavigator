@@ -76,13 +76,13 @@ class projectBasis extends lw_object
         $this->response = $response;
     }
     
-    function hideBreadcrumb($bool)
+    function setBreadcrumb($bool)
     {
         if ($bool) {
-            $this->hideBreadcrumb = true;
+            $this->showBreadcrumb = true;
         }
         else {
-            $this->hideBreadcrumb = false;
+            $this->showBreadcrumb = false;
         }
     }
     
@@ -151,8 +151,12 @@ class projectBasis extends lw_object
      */
     function redirectToParentList() 
     {
-        $parentObject = $this->directoryObject->getActualParentObject();
-        lw_object::pageReload($this->buildLink('navigation', 'show', $parentObject->getRelativePath()));
+        $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+                
+        $length = strlen($path) - strlen($this->directoryObject->getName());
+        $relPath = substr($path, 0, $length);
+        
+        lw_object::pageReload($this->buildLink('navigation', 'show', $relPath));
     }
 
     /**
@@ -160,7 +164,9 @@ class projectBasis extends lw_object
      */
     function redirectToActualList() 
     {
-        lw_object::pageReload($this->buildLink('navigation', 'show', $this->directoryObject->getRelativePath()));
+        $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+        
+        lw_object::pageReload($this->buildLink('navigation', 'show', $path));
     }
     
     /**
@@ -197,6 +203,33 @@ class projectBasis extends lw_object
         }
     }
     
+    function getDirLevel($path) 
+    {
+        $explodeDir = explode("/", $path);
+        foreach($explodeDir as $dir) {
+            if (strlen(trim($dir))>0) {
+                $index++;
+            }
+        }       
+        return $index;
+    }
+    
+    function isSameDir($a, $b) 
+    {
+        $lasta = substr($a, -1);
+        if ($lasta != "/") {
+            $a = $a."/";
+        }   
+        $lastb = substr($b, -1);
+        if ($lastb != "/") {
+            $b = $b."/";
+        }   
+        if ($a == $b) {
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Prüft ob die Verzeichnistiefe, die angegebene Max.-Verzeichnistiefe, nicht überschreitet
      * @param string $relpath
@@ -204,20 +237,22 @@ class projectBasis extends lw_object
      */
     function checkDirLevel($relPath = false)
     {
-        if($this->maxDirLevels == 0){
+        if($this->maxDirLevels == 0) {
             return false;
         }
-        if($relPath != false){
+        if($relPath != false) {
 
             $relPath = $relPath . "/";
+            $relPath = str_replace("//", "/", $relPath);
             $explodeDir = explode("/", $relPath, -1);
             $index = count($explodeDir);
             
-            if($index <= $this->maxDirLevels -1){
+            //if($index <= $this->maxDirLevels -1) {
+            if($index <= $this->maxDirLevels) {
                 return true;
             }
         }
-        if($this->maxDirLevels != 0 && $relPath == false){
+        if($this->maxDirLevels != 0 && $relPath == false) {
             return true;
         }
     }
@@ -250,4 +285,41 @@ class projectBasis extends lw_object
             return true;
         }
     }
+    
+//    /**
+//    * Arrayfehler beim Key "relpath" werden korrigiert und das korrigierte Arraay zurückgegeben.
+//    * @param array $array
+//    * @return array 
+//    */
+//    function correctRelpathesInDirArray($array){
+//        $count = count($array);
+//        
+//        #die("abufdas ".$count);
+//        $gesamtfundstellen = "";
+//        for($i = 0; $i <= $count; $i++){
+//            $k = $i+1;
+//            if($array[$i]["name"] == $array[$k]["name"] && $array[$i]["relpath"] == $array[$k]["relpath"]){
+//                $fundstelle = $i . "," . $k . ",";
+//                if(!empty($gesamtfundstellen)){
+//                    $gesamtfundstellen = str_replace($i, $fundstelle, $gesamtfundstellen);
+//                }
+//                else{
+//                    $gesamtfundstellen = $fundstelle;
+//                }
+//            }
+//        }
+//        
+//        $fundstellenArray = explode(",", $gesamtfundstellen, -1);
+//        $index = count($fundstellenArray);
+//        unset($fundstellenArray[$index -1]);
+//        
+//        for($i = 0; $i <= $index; $i++){
+//            $k = $i-1;
+//            if($fundstellenArray[$i] -1 == $fundstellenArray[$k]){
+//                $array[$fundstellenArray[$i]]["relpath"] = $array[$fundstellenArray[$k]]["relpath"].$array[$fundstellenArray[$k]]["name"];
+//            }
+//        }
+//
+//        return $array;
+//    }   
 }

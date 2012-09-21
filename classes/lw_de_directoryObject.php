@@ -52,6 +52,7 @@ class lw_de_directoryObject
             $this->directoryObjectContainer[$dir.$home]->setConfiguration($config);
             $this->directoryObjectContainer[$dir.$home]->init();
         }
+        
         return $this->directoryObjectContainer[$dir.$home];
     }
     
@@ -70,7 +71,6 @@ class lw_de_directoryObject
             else{
                 $this->homeDir = $dir . "/";
             }
-        #$this->homeDir = $dir;
         }
     }
     
@@ -107,7 +107,7 @@ class lw_de_directoryObject
     public function init()
     {
         $path = $this->configuration["path"]["web_resource"]."lw_directorynavigator/".$this->homeDir.$this->dir;
-        
+    
         if (!is_writeable($path)) {
             throw new Exception("directory is not writeable: ".$path);
         }
@@ -135,6 +135,11 @@ class lw_de_directoryObject
         return $this->directoryObject->getBasepath().$this->directoryObject->getName();
     }
 
+    function getPath()
+    {
+        return $this->directoryObject->getPath();
+    }
+    
     /**
      * Der aktuelle Verzeichnisname wird zurückgegeben.
      * 
@@ -160,7 +165,7 @@ class lw_de_directoryObject
             return false;
         }
         if (!$this->parentObject) {
-            $parentDir = str_replace($this->configuration["path"]["web_resource"]."lw_directorynavigator/".$this->homeDir, "", $this->directoryObject->getBasepath());
+            $parentDir = str_replace($this->configuration["path"]["web_resource"]."lw_directorynavigator/".$this->homeDir, "", $this->directoryObject->getPath());
             $this->parentObject = lw_de_directoryObject::getInstance($parentDir, $this->homeDir, $this->configuration); 
         }
         return $this->parentObject;

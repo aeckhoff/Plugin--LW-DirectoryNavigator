@@ -86,6 +86,10 @@ class lw_de_file extends projectBasis
      */
     function rename() 
     {
+//        $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+//        $length = strlen($path) - strlen($this->directoryObject->getName());
+//        $relPath = substr($path, 0, $length);
+        
         if($this->isFileInMaxDirLevel($this->fileObject->getPath()) == true){
             $this->fileObject->rename($this->request->getRaw("rename") . "." . $this->fileObject->getExtension());
             $this->redirectToActualList();
@@ -119,8 +123,17 @@ class lw_de_file extends projectBasis
      */
     function download() 
     {
-        if($this->isFileInMaxDirLevel($this->fileObject->getPath()) == true){
-            $content = file_get_contents($this->fileObject->getFullPath());
+        #die($this->directoryObject->getPath().$this->request->getRaw("file"));
+        #die($this->fileObject->getFullPath());
+        
+        $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+        #$length = strlen($path) - strlen($this->directoryObject->getName());
+        #$relPath = substr($path, 0, $length);
+        $directory = lw_directory::getInstance($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir().$path);
+        #die($directory->getPath().$this->fileObject->getFilename());
+        
+        if($this->checkDirLevel($path) == true){
+            $content = file_get_contents($directory->getPath().$this->fileObject->getFilename());
             header('Content-Type: application/octet-stream;');
             header("Content-Disposition: attachment; filename=\"" . $this->fileObject->getFilename() . "\";");
             die($content);
@@ -156,7 +169,7 @@ class lw_de_file extends projectBasis
     function showUploadForm() 
     {
         $tpl = new lw_te(file_get_contents(dirname(__FILE__) . '/../templates/upload.tpl.html'));
-        $tpl->reg("backlink", $this->buildLink("navigation", "show", $this->request->getRaw("dir")));
+        $tpl->reg("backlink", $this->buildLink("navigation", "show", $this->request->getRaw("dir")) . "%2F");
         $tpl->reg("formactionlink", $this->buildLink("file", "new", $this->request->getRaw("dir")));
         $tpl->reg("maxfilesize", ini_get('post_max_size')."b");
         
@@ -224,14 +237,14 @@ class lw_de_file extends projectBasis
         
             $fileDataArray["name"] = preg_replace("/[^A-Z .a-z0-9_-]/", "", $fileDataArray["name"]);
             
-            if (is_file($this->directoryObject->getActualPath().$fileDataArray["name"])) {
+            if (is_file($this->directoryObject->getPath().$fileDataArray["name"])) {
                 $filename = $this->getFilenameInCaseOfExistingSameFilename($fileDataArray);
             }
             else {
                 $filename = $fileDataArray['name'];
             }
             $this->directoryObject->addFile($fileDataArray['tmp_name'], $filename);
-            $this->redirectToActualList();
+            $this->redirectToActualList($this->directoryObject->getName());
         }
         else {
             lw_object::pageReload($this->buildLink('file', 'new', $this->request->getRaw("dir"), false, array("refuse"=>2)));

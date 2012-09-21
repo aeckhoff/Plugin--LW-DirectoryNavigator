@@ -48,9 +48,9 @@ class lw_directorynavigator extends lw_plugin
      */
     function buildPageOutput() 
     {
-        $this->existLwDirectorynavigatorDir();
         $this->existLwdirinfoInMainPluginDir();
         $this->checkUseOfCustomCss();
+        $this->existLwDirectorynavigatorDir();
         
         $modul = $this->request->getAlnum("module");
         if (!$modul) {
@@ -107,7 +107,7 @@ class lw_directorynavigator extends lw_plugin
         $object->setMaxDirLevels($plugindata['parameter']['maxDirLevels']);
         $object->setUseOnlyHome_lwdirinfo($plugindata['parameter']['use_only_lwdirinfo_homedir']);
         $object->setTreeView($plugindata['parameter']['treeView']);
-        $object->hideBreadcrumb($plugindata['parameter']['nobreadcrumb']);
+        $object->setBreadcrumb($plugindata['parameter']['showbreadcrumb']);
         
         return $object;
     }
@@ -136,6 +136,7 @@ class lw_directorynavigator extends lw_plugin
     function getDirectoryObject($homedir, $allowedExtensions)
     {
         require_once dirname(__FILE__).'/classes/lw_de_directoryObject.php';
+        
         $directoryObject = lw_de_directoryObject::getInstance($this->request->getRaw('dir'), $homedir, $this->config);
         $directoryObject->setAllowedExtensions($allowedExtensions);
         return $directoryObject;
@@ -178,7 +179,8 @@ class lw_directorynavigator extends lw_plugin
     function existLwDirectorynavigatorDir()
     {
         require_once dirname(__FILE__).'/classes/projectBasis.php';
-        $projectBasis = $this->getObject("projectBasis");
+        #die("existLwDirectorynavigatorDir");
+        #$projectBasis = $this->getObject("projectBasis");
 
         $directory = lw_directory::getInstance($this->config["path"]["web_resource"]);
         $directories = $directory->getDirectoryContents("dir");
@@ -188,7 +190,7 @@ class lw_directorynavigator extends lw_plugin
         if (!(in_array("lw_directorynavigator/", $contentArray))) {
             $directory->add("lw_directorynavigator");
             lw_object::pageReload($projectBasis->buildLink("navigation", "show", "home"));
-        }        
+        }
     }
     
     /**

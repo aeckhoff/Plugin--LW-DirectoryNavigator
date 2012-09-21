@@ -34,7 +34,7 @@ class backend extends projectBasis
         $parameter['use_custom_css'] = $this->request->getInt("use_custom_css");
         $parameter['use_only_lwdirinfo_homedir'] = $this->request->getInt("use_only_lwdirinfo_homedir");
         $parameter['treeView'] = $this->request->getInt("treeView");
-        $parameter['nobreadcrumb'] = $this->request->getInt("nobreadcrumb");
+        $parameter['showbreadcrumb'] = $this->request->getInt("showbreadcrumb");
         
         $content = false;
         $this->repository->plugins()->savePluginData($this->getPluginName(), $this->getOid(), $parameter, $content);
@@ -100,9 +100,9 @@ class backend extends projectBasis
                 ->setValidation('hasMaxlength', array('value' => 1), 'Der Wert darf maximal 1 Zeichen lang sein!');
         
         $form->createElement("checkbox")
-                ->setName('nobreadcrumb')
-                ->setID('lw_breadcrumb')
-                ->setLabel('Breadcrumb ausblenden?')
+                ->setName('showbreadcrumb')
+                ->setID('lw_showbreadcrumb')
+                ->setLabel('Breadcrumb anzeigen ?')
                 ->setValue(1)
                 ->setFilter('striptags')
                 ->setValidation('hasMaxlength', array('value' => 1), 'Der Wert darf maximal 1 Zeichen lang sein!');

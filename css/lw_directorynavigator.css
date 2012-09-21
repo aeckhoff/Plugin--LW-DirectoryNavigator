@@ -91,7 +91,6 @@
                 padding: 2px;
                 text-decoration: none;
                 float: right;
-                width: 42px;
             }
 
             #directoryinfo #showInfo {
@@ -99,6 +98,8 @@
                 padding: 5px 3px 20px 3px;
                 font-size: 12px;
                 float: none;
+                height:200px;
+                overflow:auto;
             }
             
             #directoryinfo #showInfo h1 {
@@ -200,24 +201,19 @@
                 border-bottom:2px solid black;
             }
 
-            #container_directorydisplay table tbody tr.odd {
+            #container_directorydisplay table tbody tr.actual {
                 background-color: #bbbbbb;
             }
-            
-            #container_directorydisplay table tbody tr.even {
+
+            #container_directorydisplay table tbody tr {
                 background-color: #dfdfdf;
             }
             
-            #container_directorydisplay table tbody tr.trenner {
-                border-top: 2px solid #000;
-                border-bottom: 2px solid #000;
-                background-color: #fff;
-                font-size: 10px;
-            }
-            
-            #container_directorydisplay table tbody tr.trenner span.activeDir{
-                font-size: 10px;
-                font-weight: bold;
+            #container_directorydisplay table tbody tr.trenner, #container_directorydisplay table tbody tr.trenner td {
+                color:#000;
+                border-top:1px solid black;
+                border-bottom:1px solid black;
+                background-color: #ffffff;
             }
             
             #container_directorydisplay table tbody tr a {
@@ -234,10 +230,16 @@
                 padding-left:20px;
                 background: url("{_imageurl_}/16x16_0440/folder_go.png") no-repeat top left;
             }
-            
+
             #container_directorydisplay table tbody tr td.lwde_filename a.opendir {
                 padding-left:20px;
                 background: url("{_imageurl_}/16x16_0440/folder.png") no-repeat top left;
+            }
+            
+            #container_directorydisplay table tbody tr td.lwde_filename a.actual {
+                padding-left:20px;
+                background: url("{_imageurl_}/16x16_0440/folder.png") no-repeat top left;
+                font-weight:bold;
             }
             
             #container_directorydisplay table tbody tr td a.back {

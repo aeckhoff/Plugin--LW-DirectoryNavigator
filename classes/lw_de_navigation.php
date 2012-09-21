@@ -59,32 +59,35 @@ class lw_de_navigation extends projectBasis
             }
         }
         
+        $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+        $length = strlen($path) - strlen($this->directoryObject->getName());
+        $relPath = substr($path, 0, $length);
+        
         if($this->isLoggedIn == true) {
             $tpl->setIfVar("showadditems");
-            if($this->checkDirLevel($this->directoryObject->getRelativePath()) == true){
+            if($this->getDirLevel($path) < $this->maxDirLevels){
                 $tpl->setIfVar("showNewDir");
-                $tpl->reg("adddir" , $this->buildLink('directory', 'new', $this->directoryObject->getRelativePath()));
+                $tpl->reg("adddir" , $this->buildLink('directory', 'new', $path));
             }
-            $tpl->reg("addfile" , $this->buildLink('file', 'new', $this->directoryObject->getRelativePath()));
+            $tpl->reg("addfile" , $this->buildLink('file', 'new', $path));
         }
-        $tpl->reg("dirinfoformaction", $this->buildLink('navigation', 'show', $this->directoryObject->getRelativePath()));
+        $tpl->reg("dirinfoformaction", $this->buildLink('navigation', 'show', $path));
         
         $this->executeFileInformation($tpl);
         
-        if($this->treeView == true){
-            $tpl->setIfVar("treeView");
             if($this->directoryObject->getName() == $this->directoryObject->getHomeDir() || $this->directoryObject->getName() == "lw_directorynavigator/"){
                 $tpl->reg("activedirectory", "home/");
-            }else{
+            }
+            else{
                 $tpl->reg("activedirectory", $this->directoryObject->getName());
             }
-        }
-        if (!$this->hideBreadcrumb) {
-            $tpl->reg("breadcrumbcontent", $this->createBreadcrumbDisplay());
-            $tpl->setIfVar("showBreadcrumb");
-        }
         $tpl->reg("directorycontent", $this->createDirectoryContentDisplay());
         $tpl->reg("filecontent", $this->createFileContentDisplay());
+        
+        if ($this->showBreadcrumb) {
+            $tpl->setIfVar("showbreadcrumb");
+            $tpl->reg("breadcrumbcontent", $this->createBreadcrumbDisplay());
+        }
         
         return $tpl->parse();
     }
@@ -137,7 +140,6 @@ class lw_de_navigation extends projectBasis
         if (!empty($directories)) {
             $indent++;
             foreach ($directories as $directory) {
-                $directory = lw_directory::getInstance($directory->getPath());
                 $lowerDirs = $directory->getDirectoryContents("dir");
                 if($lowerDirs == "") {
                     $deleteButton = "show";
@@ -146,7 +148,10 @@ class lw_de_navigation extends projectBasis
                     $deleteButton = "hide";
                 }
                 
-                $relPath = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $directory->getBasepath());
+                $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $directory->getPath());
+                
+                $length = strlen($path) - strlen($directory->getName());
+                $relPath = substr($path, 0, $length);
                 
                 $this->dirArray[]  = array(
                     "name" => $directory->getName(),
@@ -155,13 +160,10 @@ class lw_de_navigation extends projectBasis
                     "deleteButton" => $deleteButton,
                     "size" => " ",
                     "indent" => $indent,
+                    "fullPath" => $path,
                     "relpath" => $relPath
                 );
-                #print_r($this->dirArray);die();
-                #if($indent < $this->maxDirLevels + 1 && $indent == 1 | $relPath == $this->request->getRaw("dir") | $this->isInRequestDir($relPath) == true){
-                #if($this->dirArray["indent"] == 1 | $this->dirArray["relpath"] == $this->request->getRaw("dir") | $this->isInRequestDir($this->dirArray["relpath"]) == true){
-                    $this->getPreparedDirectoryEntriesTreeView($indent, $directory->getPath());
-                #}
+                $this->getPreparedDirectoryEntriesTreeView($indent, $directory->getPath());
             }
         }
         return $this->dirArray;
@@ -176,18 +178,11 @@ class lw_de_navigation extends projectBasis
     function isInRequestDir($relpath = false)
     {
         if($relpath != false){
-            $explodeDir = explode("/", $this->request->getRaw("dir"), -1);
-            $index = count($explodeDir);
-
-            if($index >= 2) {
-                foreach ($explodeDir as $dir) {
-                    $path .= $dir."/";
-                }
-                if(strpos($path , $relpath)!== false){
-                    return true;
-                }
+            if(strpos($this->request->getRaw("dir") , $relpath)!== false){
+                return true;
             }
         }
+        
     }
     
     /**
@@ -245,6 +240,8 @@ class lw_de_navigation extends projectBasis
      */
     function confirmDelete($tpl)
     {
+        $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+        
         $tpl->setIfVar("confirm");
         if($this->request->getRaw("reldir") == "home") {
             $tpl->reg("reldir", "home");
@@ -253,8 +250,8 @@ class lw_de_navigation extends projectBasis
             $tpl->reg("reldir", $this->request->getRaw("reldir"));
         }
         $tpl->reg("deleteANonEmptyDir", $this->request->getRaw("delete"));
-        $tpl->reg("dir", $this->request->getRaw("delete"));
-        $tpl->reg("reldir", $this->request->getRaw("reldir"));
+        $tpl->reg("dir", urlencode($path));
+        $tpl->reg("reldir", urlencode(""));
         $tpl->reg("execute-link",  $this->getExecuteLink());  
     }
     
@@ -393,6 +390,9 @@ class lw_de_navigation extends projectBasis
                 }
             }
         }
+        if (!$output) {
+            $output = file_get_contents(dirname(__FILE__) . '/../templates/navigation_nofiles.tpl.html');
+        }
         return $output;
     }
     
@@ -424,7 +424,11 @@ class lw_de_navigation extends projectBasis
         $tpl->reg("angepasstername",$angepasstername);
         $tpl->reg("fileOrDir","Verzeichnis");
         
-        if($content["relpath"].$content["name"] == $this->request->getRaw("dir") | $this->isInRequestDir($content['name']) == true){
+        
+        if($this->isSameDir($content["relpath"].$content["name"], $this->request->getRaw("dir"))) {
+            $tpl->setIfVar("actualdir");
+        }
+        elseif($this->isInRequestDir($content['relpath'].$content["name"]) == true){
             $tpl->setIfVar("opendir");
         }
         else{
@@ -445,19 +449,16 @@ class lw_de_navigation extends projectBasis
             $tpl->setIfVar("hidedeletebutton");
             $tpl->setIfVar("hiderenamebutton");
         }
-                  
+               
+      
         if($this->treeView == true){
             $parentdir = $content["relpath"];
         }
         else{
-            if (substr($this->directoryObject->getRelativePath(), -1) != "/") {
-                $parentdir = $this->directoryObject->getRelativePath()."/";
-            }
-            else {
-                $parentdir = $this->directoryObject->getRelativePath();
-            }
+            $parentdir = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
         }
-        $tpl->reg("dir", $parentdir.$content["name"]);
+        
+        $tpl->reg("dir", urlencode($parentdir.$content["name"]));
         $tpl->reg("link", $this->buildLink("navigation", "show", $parentdir.$content["name"]));
     }
     
@@ -477,7 +478,9 @@ class lw_de_navigation extends projectBasis
         $angepasstername = substr($content["name"], 0, strpos($content["name"], $content["type"]) -1);
         $tpl->reg("angepasstername",$angepasstername);
 
-        $tpl->reg("dir", $this->directoryObject->getRelativePath());
+        $path = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+        
+        $tpl->reg("dir", urlencode($path));
         $tpl->reg("file", $content["name"]);
         $tpl->reg("link",$this->buildLink('file', 'download', $this->request->getRaw("dir"), $content["name"]));
         $tpl->setIfVar("file");
@@ -490,7 +493,8 @@ class lw_de_navigation extends projectBasis
      */
     function createBreadcrumbDisplay() 
     {
-        $strdir = $this->directoryObject->getRelativePath()."/";
+        $strdir = str_replace($this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir(), "", $this->directoryObject->getPath());
+        
         if ($strdir != false) {
             $strdir = str_replace("//", "/", $strdir);
             $explodeDir = explode("/", $strdir, -1);
