@@ -22,14 +22,14 @@
             var linktype;
             var cmdDeleteDirOrFile;
 
-            if(type == 'Datei') {
+            if(type == 'file') {
                 linktype = 'file'; 
             }
             else { 
                 linktype = 'directory'; 
             };
 
-            if(confirm(type + ' [ <!-- lw:var name --> ] wirklich l&ouml;schen ?')) {
+            if(confirm(type + 'delete <!-- lw:var fileOrDir --> [ <!-- lw:var name --> ]?')) {
                 self.location.href='<!-- lw:var execute-link -->' + linktype + '&cmd=delete&dir=<!-- lw:var dir -->&file=<!-- lw:var file -->';
             }
 
@@ -42,7 +42,7 @@
 
             var type = '<!-- lw:var fileOrDir -->';
 
-            var eingabe = prompt('Bitte geben Sie den neuen ' + type +'-Namen ein:','<!-- lw:var angepasstername -->');
+            var eingabe = prompt('New ' + type +' name:','<!-- lw:var angepasstername -->');
 
             if (eingabe != null)
             {      

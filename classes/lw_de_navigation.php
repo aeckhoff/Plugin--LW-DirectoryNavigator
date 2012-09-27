@@ -71,7 +71,7 @@ class lw_de_navigation extends projectBasis
             else {
                 $tpl->setIfVar("opendir");
             }
-            $tpl->reg("home_margin_left" , -8);
+            $tpl->reg("home_margin_left" , 0);
             $tpl->reg("home_link" , $this->buildLink('navigation', 'show', 'home'));
         }
         
@@ -146,6 +146,7 @@ class lw_de_navigation extends projectBasis
      */
     function getPreparedDirectoryEntriesTreeView($indent, $directoryPath)
     {
+        //if ($indent<10) $indent=10;
         $dir = lw_directory::getInstance($directoryPath);
         $directories = $dir->getDirectoryContents("dir");
 
@@ -233,11 +234,11 @@ class lw_de_navigation extends projectBasis
         }
         if($this->request->getAlnum("error") == "dirrename"){
             $tpl->setIfVar("error");
-            $tpl->reg("errorMsg", "ERROR: The directory [ ".$this->request->getRaw("selecteddir")." ] cannot be renamed, because another directory with the same name exists!");
+            $tpl->reg("errorMsg", "ERROR: Directory already available.");
         };
         if($this->request->getAlnum("error") == "adddir"){
             $tpl->setIfVar("error");
-            $tpl->reg("errorMsg", "ERROR: The directory [ ".$this->request->getRaw("dirname")."/ ] cannot be added, because another directory with the same name exists!");
+            $tpl->reg("errorMsg", "ERROR: Directory already available.");
         };
         if($this->request->getAlnum("error") == "url"){
             $tpl->setIfVar("error");
@@ -340,7 +341,7 @@ class lw_de_navigation extends projectBasis
 
         if($this->treeView == true){
             $tpl->setIfVar("treeView");
-            $tpl->reg("margin-left", ($content["indent"] * 25) - 25);
+            $tpl->reg("margin-left", ($content["indent"] * 25)-15);
             $tpl->setIfVar("showCompleteRow");
             $tpl->setIfVar("showAllInfos");
             $this->fillDirectoryRow($tpl, $content);
@@ -434,7 +435,7 @@ class lw_de_navigation extends projectBasis
     {
         $angepasstername = substr($content["name"], 0, strlen($content["name"]) -1);
         $tpl->reg("angepasstername",$angepasstername);
-        $tpl->reg("fileOrDir","Verzeichnis");
+        $tpl->reg("fileOrDir","directory");
         
         
         if($this->isSameDir($content["relpath"].$content["name"], $this->request->getRaw("dir"))) {
@@ -486,7 +487,7 @@ class lw_de_navigation extends projectBasis
             $tpl->setIfVar("showrenamebutton");
             $tpl->setIfVar("showdeletebutton");
         }
-        $tpl->reg("fileOrDir","Datei");
+        $tpl->reg("fileOrDir","file");
         $angepasstername = substr($content["name"], 0, strpos($content["name"], $content["type"]) -1);
         $tpl->reg("angepasstername",$angepasstername);
 

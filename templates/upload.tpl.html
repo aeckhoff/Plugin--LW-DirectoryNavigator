@@ -5,13 +5,13 @@
     </div>
 
     <div id="container_form" class="clearfix">
-        <h4>max file-size: <!-- lw:var maxfilesize --></h4>                
-        <h5>Wie soll mit Datein verfahren werden, die Sie hochladen m&ouml;chten und dieser Dateiname bereits existiert ?</h5>
+        <h4>(Max File Size: <!-- lw:var maxfilesize -->) </h4>
+        <h5>Whta should be done with the uploaded file, in case of a file with the same name already existing in the directory?</h5>
         <form action="<!-- lw:var formactionlink -->" method="POST" ENCTYPE="multipart/form-data">  
-            <div class="a"><input type="radio" name="radiobutton_upload" value="ablehnen" checked="checked">Die hochzuladende Datei soll abgelehnt werden.</div>
-            <div class="b"><input type="radio" name="radiobutton_upload" value="ueberschreiben">Die bestehende Datei soll ersetzt werden.</div>
-            <div class="a"><input type="radio" name="radiobutton_upload" value="suffix">An die hochzuladende Datei soll ein Suffix angehangen werden.</div>
-            <div class="b"><input class="upload" name="uploadfield" type="file"></div>
+            <div class="a"><input type="radio" name="radiobutton_upload" value="ablehnen" checked="checked">reject the uploaded file.</div>
+            <div class="b"><input type="radio" name="radiobutton_upload" value="ueberschreiben">replace the existing file.</div>
+            <div style="display:none;" class="a"><input type="radio" name="radiobutton_upload" value="suffix">add a suffix to the uploaded file.</div>
+            <div class="a"><input class="upload" name="uploadfield" type="file"></div>
             <div class="alast clearfix">
                 <input class="btnback" type="button" value="back" onclick="
                            

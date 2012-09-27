@@ -193,22 +193,22 @@ class lw_de_file extends projectBasis
     function showErrorMessages($tpl, $fileDataArray)
     {
         if($this->request->getAlnum("refuse") && $this->request->getAlnum("refuse") == 1){
-            $errormsg = "Datei wurde abgelehnt, Dateiname existiert bereits.";
+            $errormsg = "File already available! ";
         }
         if($this->request->getAlnum("refuse") && $this->request->getAlnum("refuse") == 2){
-            $errormsg = "Unerlaubter Daten-Typ.";
+            $errormsg = "Filetype not allowed.";
         }
         if ($this->request->getAlnum("sent") && $this->request->getAlnum("sent") == 1) {
 
             if($this->request->getAlnum("radiobutton_upload") == "") {
-                 $errormsg = "Keine Option ausgewählt, welches Verfahren angewand werden soll, wenn der Dateiname bereits existiert !";
+                 $errormsg = "no option was chosen!";
             }
             if ($this->request->getFileData("uploadfield") && empty($fileDataArray["name"])) {
-                 $errormsg = "Es wurde keine Datei ausgewählt";
+                 $errormsg = " No files selected.";
             } 
             else {
                 if($fileDataArray["size"] > $this->maxFileSizePostInBytes(ini_get('post_max_size'))) {
-                     $errormsg = "Die Datei ist zu groß!";
+                     $errormsg = "The file is too big!";
                 }
                 else{
                     return false;

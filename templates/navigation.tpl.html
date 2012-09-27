@@ -12,7 +12,7 @@
         });
         
         $("#addNewDir").click(function(){
-            var eingabe = prompt('Bitte geben Sie den Namen fuer das neue Verzeichnis an :','');
+            var eingabe = prompt('Please add a directory:','');
         
             if (eingabe != null)
             {      
@@ -30,7 +30,7 @@
         <!-- lw:endif error -->
 
         <!-- lw:if confirm -->
-            if(confirm('In dem Verzeichnis [ <!-- lw:var deleteANonEmptyDir --> ] befinden sich Daten. Verzeichnis mit allen Daten wirklich löschen ?')){
+            if(confirm('All files in the directory will be deleted!')){
                 self.location.href='<!-- lw:var execute-link -->directory&cmd=delete&dir=<!-- lw:var reldir --><!-- lw:var dir -->&confirm=1';
             }
         <!-- lw:endif confirm -->

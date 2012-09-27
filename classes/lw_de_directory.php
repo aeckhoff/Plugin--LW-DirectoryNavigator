@@ -128,7 +128,7 @@ class lw_de_directory extends projectBasis
             }
         }
         else{
-            throw new Exception("delete dir not allowed");
+            throw new Exception("delete directory not allowed");
         }
     }    
     
