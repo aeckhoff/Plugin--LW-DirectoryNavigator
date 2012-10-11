@@ -29,7 +29,7 @@
                 linktype = 'directory'; 
             };
 
-            if(confirm(type + 'delete <!-- lw:var fileOrDir --> [ <!-- lw:var name --> ]?')) {
+            if(confirm('delete <!-- lw:var fileOrDir --> [ <!-- lw:var name --> ]?')) {
                 self.location.href='<!-- lw:var execute-link -->' + linktype + '&cmd=delete&dir=<!-- lw:var dir -->&file=<!-- lw:var file -->';
             }
 
