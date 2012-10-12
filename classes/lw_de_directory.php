@@ -88,7 +88,7 @@ class lw_de_directory extends projectBasis
         $relPath = substr($path, 0, $length);
         $old = $this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir().$path;
         $new = $this->config["path"]["web_resource"]."lw_directorynavigator/".$this->directoryObject->getHomeDir().$relPath.$this->request->getRaw("rename");
-        if($this->checkDirLevel($Path) == true) {
+        if($this->checkDirLevel($path) == true) {
             rename($old,$new);
             lw_object::pageReload($this->buildLink('navigation', 'show', $relPath.$this->request->getRaw("rename")."/"));
         }
